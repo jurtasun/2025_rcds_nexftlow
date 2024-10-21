@@ -1,27 +1,40 @@
 // Define input parameters
-// params.mode = params.mode ?: error("Provide option\n1: bash, 2: python --mode")
 mode = "1"
 
 // Declare process
 process hello_bash {
+    input:
+    path fastq
+
     output:
+    stdout
+
     """
     #!/usr/bin/bash
-    echo "Hello world!"
+    echo "Hello bash!"
+    echo $fastq
     """
 }
 
 // Declare process
 process hello_python {
+    input:
+    path fastq
+
     output:
+    stdout
+
     """
     #!/usr/bin/python
-    print("Hello world")
+    print("Hello python!")
     """
 }
 
 // Declare process
 process choose_option {
+    output:
+    stdout
+
     script:
     if(mode == "1")
         """
@@ -56,43 +69,19 @@ process print_path {
   """
 }
 
-// // Define workflow
-// workflow {
+// Declare input files
+list_files = file("/home/jurtasun/mnt/storage/bioinformatics/users/jurtasun/resources/nextflow/data/*.txt")
 
-//     // Processes with no input
-//     hello_bash()
-//     hello_python()
-//     choose_option()
-
-//     // Processes with input
-//     def num = Channel.of(1, 2, 3)
-//     get_files(num)
-//     result = print_path(1)
-//     result.view { "Result: ${it}" }
-//     Channel.of(1, 2, 3).view()
-
-// }
-
-// process blast_all {
-//   input:
-//   path query_file
-
-//   "blastp -query ${query_file} -db nr"
-// }
-
-// workflow {
-//     def proteins = Channel.fromPath("home/jurtasun/mnt/network/dataexchange/merkenschlager/genomics/nextseq2000/230503_VH00504_123_AACHC5MM5/*.fastq.gz")
-//     blast_all(proteins)
-// }
-
-process blast_all {
-    input:
-    path 'seq'
-
-    "echo seq*"
-}
-
+// Define workflow
 workflow {
-    def fastq = Channel.fromPath("home/jurtasun/mnt/network/dataexchange/merkenschlager/genomics/nextseq2000/230503_VH00504_123_AACHC5MM5/*.fastq.gz").buffer(size: 3)
-    blast_all(fastq)
+
+    // // Print input
+    // print(list_files)
+    // Channel.of(list_files) | view()
+
+    // Processes
+    hello_bash(list_files) | view()
+    hello_python(list_files) | view()
+    choose_option() | view()
+
 }
