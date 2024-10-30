@@ -4,7 +4,6 @@
 ## LMS Bioinformatics
 
 <img src="/readme_figures/nextflow-logo.png">
-<img src="/readme_figures/nf-core-logo.png">
 
 In Chapter 1, you learned how to use the basic building blocks of Nextflow to assemble a simple pipeline capable of processing some text and parallelizing execution if there were multiple inputs.
 
