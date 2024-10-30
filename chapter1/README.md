@@ -23,6 +23,8 @@ Show the file contents
 less output.txt
 ```
 
+You now know how to run a simple command in the terminal that outputs some text, and optionally, how to make it write the output to a file. Next, we will discover what that would look like written as a Nextflow workflow.
+
 ## 1. Run Hello world with nextflow script.
 
 As mentioned in the orientation, we provide you with a fully functional if minimalist workflow script named hello-world.nf that does the same thing as before (write out 'Hello World!') but with Nextflow.
