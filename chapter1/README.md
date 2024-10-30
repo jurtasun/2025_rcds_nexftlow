@@ -1,5 +1,10 @@
 # Chapter 1 - Hello world with nextflow
 
+## Jesús Urtasun Elizari
+
+<img src="/readme_figures/nextflow-logo.png">
+<img src="/readme_figures/nf-core-logo.png">
+
 A "Hello, World!" is a minimalist example that is meant to demonstrate the basic syntax and structure of a programming language or software framework. The example typically consists of printing the phrase "Hello, World!" to the output device, such as the console or terminal, or writing it to a file.
 
 In this first part of the Hello Nextflow training course, we ease into the topic with a very simple domain-agnostic Hello World example, which we'll progressively build up to demonstrate the usage of foundational Nextflow logic and components.
@@ -25,7 +30,7 @@ less output.txt
 
 You now know how to run a simple command in the terminal that outputs some text, and optionally, how to make it write the output to a file. Next, we will discover what that would look like written as a Nextflow workflow.
 
-## 1. Run Hello world with nextflow script.
+## 1. Run Hello world with nextflow script
 
 ### 1.1 The code structure
 
@@ -70,3 +75,17 @@ nextflow run hello-world.nf
 The most important output here is the last line (line 6), which reports that the `sayHello` process was successfully executed once.
 
 Okay, that's great, but where do we find the output? The `sayHello` process definition said that the output would be sent to standard out, but nothing got printed in the console, did it?
+
+# 2. Send the output to a file
+
+# 3. Use the Nextflow resume feature
+
+# 4. Add in variable inputs using a channel
+
+# 5. Use CLI parameters for inputs
+
+# 7. Add a second step to the workflow
+
+# 8. Run workdlow with many input values
+
+# 9. Run workflow with an input runcard / sample sheet.

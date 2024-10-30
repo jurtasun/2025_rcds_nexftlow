@@ -2,7 +2,8 @@
 
 ## Jesús Urtasun Elizari
 
-<img src="/readme_figures/nextflow-logo.png">
+<img src="/readme_figures/nextflow-logo.png", width="500" height="300">
+<img src="/readme_figures/nf-core-logo.png">
 <img src="/readme_figures/seqera-logo.png">
 
 ### Find the content of the course in GitHub:
