@@ -1,7 +1,7 @@
-# Chapter 1 - Hello world with nextflow
+# LMS 2024 - Introduction to Nextflow & nf-core
 
-## Jesús Urtasun Elizari
-## LMS Bioinformatics
+## Chapter 1 - Hello world with nextflow
+## Jesús Urtasun Elizari, LMS Bioinformatics
 
 <img src="/readme_figures/nextflow-logo.png">
 

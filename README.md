@@ -1,4 +1,4 @@
-# LMS 2024 - Nextflow & nf-core
+# LMS 2024 - Introduction to Nextflow & nf-core
 
 ## Jesús Urtasun Elizari
 ## LMS Bioinformatics
@@ -31,7 +31,7 @@ The course is organized in six chapters, covering topics listed below. All will 
 
 - Processes, channels, operators.
 
-## Chapter 5. Config, environments, resource usage.
+## Chapter 5. Nextflow config, environments, resource usage.
 
 - Modules in nextflow: modular workflow, efficiency and optimization.
 
