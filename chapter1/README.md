@@ -1,6 +1,7 @@
 # Chapter 1 - Hello world with nextflow
 
 ## Jesús Urtasun Elizari
+## LMS Bioinformatics
 
 <img src="/readme_figures/nextflow-logo.png">
 <img src="/readme_figures/nf-core-logo.png">

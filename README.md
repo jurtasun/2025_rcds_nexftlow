@@ -1,6 +1,7 @@
 # LMS 2024 - Nextflow & nf-core
 
 ## Jesús Urtasun Elizari
+## LMS Bioinformatics
 
 <img src="/readme_figures/nextflow-logo.png">
 <img src="/readme_figures/nf-core-logo.png">
