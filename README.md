@@ -2,7 +2,7 @@
 
 ## Jesús Urtasun Elizari
 
-<img src="/readme_figures/nextflow-logo.png", alt="/readme_figures/nextflow-logo.png" width="50%">
+<img src="/readme_figures/nextflow-logo.png">
 <img src="/readme_figures/nf-core-logo.png">
 <img src="/readme_figures/seqera-logo.png">
 
