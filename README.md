@@ -1,15 +1,16 @@
 # LMS 2024 - Nextflow & nf-core
 
-## Dr. Jesús Urtasun Elizari
+## Jesús Urtasun Elizari
 
 <img src="/readme_figures/nextflow-logo.png">
+<img src="/readme_figures/nf-core-logo.png">
 
 ### Find the content of the course in GitHub:
 [https://github.com/jurtasun/2024_nexftlow](https://github.com/jurtasun/2024_nexftlow)
 
-This course provides an introduction to the field of probability and statistical inference. The topics covered will include basic concepts on probability theory, inference, distributions, and hypothesis testing. The aim of the course is to provide strong foundations at the mathematical and theoretical level, while providing practical exercises to work on real data.
+This course provides an introduction to nextflow and nf-core. The topics covered will include basic concepts on bash scripting and linux OS, containers and environments. Then we will show how nextflow can be used to build automatized and reproducible workflows for biological and genomics data analysis.
 
-The course is organized in three chapters, covering topics listed below. All will be followed by a practical session and hands-on coding, both in Python and R. No prior experience on statistics or programming is required for the attendance of this course.
+The course is organized in six chapters, covering topics listed below. All will be followed by a practical session and hands-on coding, both in Python and R. No prior experience on statistics or programming is required for the attendance of this course.
 
 # Roadmap of the course
 
