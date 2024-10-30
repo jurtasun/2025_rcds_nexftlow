@@ -14,19 +14,27 @@ The course is organized in six chapters, covering topics listed below. All will 
 
 # Roadmap of the course
 
-## Chapter 1. Introduction to nextflow and containers.
+## Chapter 1. Hello world with nextflow.
 
 - Hello world with nexftlow.
+
+## Chapter 2. Containers: docker & singularity.
+
 - Containers: docker and singularity.
+
+## Chapter 3. Genomics with nexftlow.
+
 - Genomics with nexftlow.
 
-## Chapter 2. Operators, config, modules.
+## Chapter 4. Processes, channels, operators.
 
-- The nextflow syntax: processes, channels, operators.
-- Config nextflow: pipelines, environments, resource usage.
+- Processes, channels, operators.
+
+## Chapter 5. Config, environments, resource usage.
+
 - Modules in nextflow: modular workflow, efficiency and optimization.
 
-## Chapter 3. Test & debug, nf-core and sequera.
+## Chapter 6. Test & debug, nf-core and sequera.
 
 - Test and debug a nextflow workflow.
 - nf-core: Standardized and reproducible pipelines.
