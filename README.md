@@ -3,7 +3,7 @@
 ## Jesús Urtasun Elizari
 
 <img src="/readme_figures/nextflow-logo.png">
-<img src="/readme_figures/nf-core-logo.png">
+<img src="/readme_figures/seqera-logo.png">
 
 ### Find the content of the course in GitHub:
 [https://github.com/jurtasun/2024_nexftlow](https://github.com/jurtasun/2024_nexftlow)
