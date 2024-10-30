@@ -1,9 +1,14 @@
 # LMS 2024 - Introduction to Nextflow & nf-core
 
-## Chapter 2. Containers: docker & singularity.
-## Jesús Urtasun Elizari, LMS Bioinformatics
+### Jesús Urtasun Elizari, LMS Bioinformatics
+
+LMS email address `Jesus.Urtasun@lms.mrc.ac.uk`
+
+ICL email address `jurtasun@ic.ac.uk`
 
 <img src="/readme_figures/nextflow-logo.png">
+
+## Chapter 2. Containers: docker & singularity.
 
 In Chapter 1, you learned how to use the basic building blocks of Nextflow to assemble a simple pipeline capable of processing some text and parallelizing execution if there were multiple inputs.
 

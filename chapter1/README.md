@@ -1,9 +1,14 @@
 # LMS 2024 - Introduction to Nextflow & nf-core
 
-## Chapter 1 - Hello world with nextflow
-## Jesús Urtasun Elizari, LMS Bioinformatics
+### Jesús Urtasun Elizari, LMS Bioinformatics
+
+LMS email address `Jesus.Urtasun@lms.mrc.ac.uk`
+
+ICL email address `jurtasun@ic.ac.uk`
 
 <img src="/readme_figures/nextflow-logo.png">
+
+## Chapter 1 - Hello world with nextflow
 
 A "Hello, World!" is a minimalist example that is meant to demonstrate the basic syntax and structure of a programming language or software framework. The example typically consists of printing the phrase "Hello, World!" to the output device, such as the console or terminal, or writing it to a file.
 
