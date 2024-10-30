@@ -27,7 +27,9 @@ You now know how to run a simple command in the terminal that outputs some text,
 
 ## 1. Run Hello world with nextflow script.
 
-As mentioned in the orientation, we provide you with a fully functional if minimalist workflow script named hello-world.nf that does the same thing as before (write out 'Hello World!') but with Nextflow.
+### 1.1 The code structure
+
+As mentioned in the orientation, we provide you with a fully functional if minimalist workflow script named `hello-world.nf` that does the same thing as before (write out 'Hello World!') but with Nextflow.
 
 To get you started, we'll first open up the workflow script so you can get a sense of how it's structured, then we'll run it (before trying to make any modifications) to verify that it does what we expect.
 
@@ -53,3 +55,18 @@ workflow {
     sayHello()
 }
 ```
+
+The first block of code describes a process. The process definition starts with the keyword `process`, followed by the process name and finally the process body delimited by curly braces. The process body must contain a script block which specifies the command to run, which can be anything you would be able to run in a command line terminal. Here we have a process called `sayHello` that writes its output to `stdout`.
+
+The second block of code describes the workflow itself. The workflow definition starts with the keyword `workflow`, followed by an optional name, then the workflow body delimited by curly braces.. Here we have a workflow that consists of one call to the `sayHello` process.
+
+### 1.2. Run the workflow
+
+Run the following command in your terminal
+
+```bash
+nextflow run hello-world.nf
+```
+The most important output here is the last line (line 6), which reports that the `sayHello` process was successfully executed once.
+
+Okay, that's great, but where do we find the output? The `sayHello` process definition said that the output would be sent to standard out, but nothing got printed in the console, did it?
