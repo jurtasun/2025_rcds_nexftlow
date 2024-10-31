@@ -10,9 +10,11 @@ ICL email address `jurtasun@ic.ac.uk`
 
 ## Chapter 1 - Hello world with nextflow
 
-A "Hello, World!" is a minimalist example that is meant to demonstrate the basic syntax and structure of a programming language or software framework. The example typically consists of printing the phrase "Hello, World!" to the output device, such as the console or terminal, or writing it to a file.
+A "Hello, World!" is a minimalist example that is meant to demonstrate the basic syntax and structure of a programming language or software framework.
+The example typically consists of printing the phrase "Hello, World!" to the output device, such as the console or terminal, or writing it to a file.
 
-In this first part of the Hello Nextflow training course, we ease into the topic with a very simple domain-agnostic Hello World example, which we'll progressively build up to demonstrate the usage of foundational Nextflow logic and components.
+In this first part of the Hello Nextflow training course, we ease into the topic with a very simple domain-agnostic Hello World example, 
+which we'll progressively build up to demonstrate the usage of foundational Nextflow logic and components.
 
 ## 0. Warmup: run Hello world on terminal
 
@@ -33,15 +35,18 @@ Show the file contents
 less output.txt
 ```
 
-You now know how to run a simple command in the terminal that outputs some text, and optionally, how to make it write the output to a file. Next, we will discover what that would look like written as a Nextflow workflow.
+You now know how to run a simple command in the terminal that outputs some text, and optionally, how to make it write the output to a file. 
+Next, we will discover what that would look like written as a Nextflow workflow.
 
 ## 1. Run Hello world with nextflow script
 
 ### 1.1 The code structure
 
-As mentioned in the orientation, we provide you with a fully functional if minimalist workflow script named `hello-world.nf` that does the same thing as before (write out 'Hello World!') but with Nextflow.
+As mentioned in the orientation, we provide you with a fully functional if minimalist workflow script named `hello-world.nf` 
+that does the same thing as before (write out 'Hello World!') but with Nextflow.
 
-To get you started, we'll first open up the workflow script so you can get a sense of how it's structured, then we'll run it (before trying to make any modifications) to verify that it does what we expect.
+To get you started, we'll first open up the workflow script so you can get a sense of how it's structured, 
+then we'll run it (before trying to make any modifications) to verify that it does what we expect.
 
 ```nextflow
 #!/usr/bin/env nextflow
@@ -66,31 +71,120 @@ workflow {
 }
 ```
 
-The first block of code describes a process. The process definition starts with the keyword `process`, followed by the process name and finally the process body delimited by curly braces. The process body must contain a script block which specifies the command to run, which can be anything you would be able to run in a command line terminal. Here we have a process called `sayHello` that writes its output to `stdout`.
+The first block of code describes a process. The process definition starts with the keyword `process`, 
+followed by the process name and finally the process body delimited by curly braces. 
+The process body must contain a script block which specifies the command to run, 
+which can be anything you would be able to run in a command line terminal. 
+Here we have a process called `sayHello` that writes its output to `stdout`.
 
-The second block of code describes the workflow itself. The workflow definition starts with the keyword `workflow`, followed by an optional name, then the workflow body delimited by curly braces.. Here we have a workflow that consists of one call to the `sayHello` process.
+The second block of code describes the workflow itself. The workflow definition starts with the keyword `workflow`, 
+followed by an optional name, then the workflow body delimited by curly braces. 
+Here we have a workflow that consists of one call to the `sayHello` process.
 
 ### 1.2. Run the workflow
 
-Run the following command in your terminal
+Run the following command in your terminal.
 
 ```bash
 nextflow run hello-world.nf
 ```
 The most important output here is the last line (line 6), which reports that the `sayHello` process was successfully executed once.
 
-Okay, that's great, but where do we find the output? The `sayHello` process definition said that the output would be sent to standard out, but nothing got printed in the console, did it?
+Okay, that's great, but where do we find the output? The `sayHello` process definition said that the output would be sent to standard out, 
+but nothing got printed in the console, did it?
 
-# 2. Send the output to a file
+## 2. Send the output to a file
 
-# 3. Use the Nextflow resume feature
+Instead of printing "Hello World!" to standard output, we'd prefer to save that output to a specific file, 
+just like we did when running in the terminal earlier.
+This is how most tools that you'll run as part of real-world pipelines typically behave; we'll see examples of that later.
 
-# 4. Add in variable inputs using a channel
+To achieve this result, both the script and the output definition blocks need to be updated.
 
-# 5. Use CLI parameters for inputs
+### 2.1. Update the process command to output a named file
 
-# 7. Add a second step to the workflow
+This is the same change we made when we ran the command directly in the terminal earlier.
 
-# 8. Run workdlow with many input values
+*before*
+```nextflow
+    """
+    echo 'Hello World!'
+    """
+```
+*after*
+```nextflow
+    """
+    echo 'Hello World!' > output.txt
+    """
+```
 
-# 9. Run workflow with an input runcard / sample sheet.
+### 2.2. Update the output declaration in the `sayHello` process
+
+We need to tell Nextflow that it should now look for a specific file to be produced by the process execution.
+
+*before*
+```nextflow
+    output:
+        stdout
+```
+*after*
+```nextflow
+    output:
+        path 'output.txt'
+```
+
+Run the updated file in your terminal.
+
+```bash
+nextflow run hello-world.nf
+```
+
+Like you did before, find the `work` directory in the file explorer. 
+There, find the `output.txt` output file and verify that it contains the greeting as expected.
+
+### 2.3. Add a `publishDir` directive to the process
+
+You'll have noticed that the output is buried in a working directory several layers deep. 
+Nextflow is in control of this directory and we are not supposed to interact with it. 
+To make the output file more accessible, we can utilize the `publishDir` directive. 
+By specifying this directive, we are telling Nextflow to automatically copy the output file to a designated output directory. 
+This allows us to leave the working directory alone, while still having easy access to the desired output file.
+
+*before*
+```nextflow
+process sayHello {
+
+    output:
+        stdout
+```
+*after*
+```nextflow
+process sayHello {
+
+    publishDir 'results', mode: 'copy'
+
+    output:
+        stdout
+```
+
+Run the updated file in your terminal.
+
+```bash
+nextflow run hello-world.nf
+```
+
+This time, Nextflow will have created a new directory called `results/`. In this directory is our `output.txt` file. 
+If you check the contents it should match the output in our work/task directory. This is how we move results files outside of the working directories.
+This way, you can send outputs to a specific named file and use the `publishDir` directive to move files outside of the Nextflow working directory.
+
+## 3. Use the Nextflow resume feature
+
+## 4. Add in variable inputs using a channel
+
+## 5. Use CLI parameters for inputs
+
+## 7. Add a second step to the workflow
+
+## 8. Run workdlow with many input values
+
+## 9. Run workflow with an input runcard / sample sheet.
