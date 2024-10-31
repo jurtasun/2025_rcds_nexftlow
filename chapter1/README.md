@@ -303,7 +303,6 @@ sayHello()
 // emit a greeting
 sayHello(greeting_ch)
 
-}
 ```
 
 Run the updated file in your terminal.
@@ -317,6 +316,71 @@ so far we're just progressively tweaking the internal plumbing to increase the f
 You know how to use a simple channel to provide an input to a process.
 
 ## 6. Use CLI parameters for inputs
+
+We want to be able to specify the input from the command line, since that is the piece that will almost always be different in subsequent runs of the workflow. Good news: Nextflow has a built-in workflow parameter system called `params`, which makes it easy to declare and use CLI parameters.
+
+### 6.1. Edit the input channel declaration to use a parameter
+
+Here we swap out the hardcoded string for `params.greeting` in the channel creation line.
+
+*before*
+```nextflow
+
+// create a channel for inputs
+greeting_ch = Channel.of('Hello world!')
+
+```
+*after*
+```nextflow
+
+// create a channel for inputs
+greeting_ch = Channel.of(params.greeting)
+
+```
+
+This automatically creates a parameter called `greeting` that you can use to provide a value in the command line.
+
+### 6.2. Run the workflow again with the `--greeting parameter`
+
+To provide a value for this parameter, simply add `--greeting <value>` to your command line.
+
+```bash
+nextflow run hello-world.nf --greeting 'Bonjour le monde!'
+```
+
+### 6.3. Set a default value for a command line paramete
+
+In many cases, it makes sense to supply a default value for a given parameter so that you don't have to specify it for every run.
+
+Let's initialize the greeting parameter with a default value by adding the parameter declaration at the top of the script.
+
+```nextflow
+
+// Pipeline parameters
+params.greeting = "Holà mundo!"
+
+```
+
+Now that you have a default value set, you can run the workflow again without having to specify a value in the command line.
+
+```bash
+nextflow run hello-world.nf
+```
+
+Check the output in the results directory, and... Tadaa! It works! Nextflow used the default value to name the output. 
+But wait, what happens now if we provide the parameter in the command line?
+
+Run the workflow again with the `--greeting` parameter on the command line using a different greeting
+
+```bash
+nextflow run hello-world.nf --greeting 'Konnichiwa!
+```
+
+Check the results directory and look at the contents of `output.txt`. Tadaa again!
+
+The value of the parameter we passed on the command line overrode the value we gave the variable in the script.
+Now you know how to set up an input variable for a process and supply a value in the command line.
+Learn how to add in a second process and chain them together.
 
 ## 7. Add a second step to the workflow
 
