@@ -62,12 +62,14 @@ process sayHello {
     """
     echo 'Hello World!'
     """
+
 }
 
 workflow {
 
     // emit a greeting
     sayHello()
+
 }
 ```
 
@@ -179,9 +181,142 @@ This way, you can send outputs to a specific named file and use the `publishDir`
 
 ## 3. Use the Nextflow resume feature
 
+Nextflow has an option called -resume that allows you to re-run a pipeline you've already launched previously. 
+When launched with -resume any processes that have already been run with the exact same code, settings and inputs will be skipped. 
+Using this mode means Nextflow will only run processes that are either new, have been modified or are being provided new settings or inputs.
+
+There are two key advantages to doing this:
+
+- If you're in the middle of developing your pipeline, you can iterate more rapidly since you only effectively have to run the process(es) you're actively working on in order to test your changes.
+- If you're running a pipeline in production and something goes wrong, in many cases you can fix the issue and relaunch the pipeline, 
+and it will resume running from the point of failure, which can save you a lot of time and compute.
+
 ## 4. Add in variable inputs using a channel
 
-## 5. Use CLI parameters for inputs
+Run the updated file in your terminal.
+
+```bash
+nextflow run hello-world.nf
+```
+
+Notice the additional `cached:` bit in the process status line, which means that Nextflow has recognized that it has already done this work and simply re-used the result from the last run.
+
+## 5. Add in variable inputs using a channel
+
+So far, we've been emitting a greeting hardcoded into the process command. 
+Now we're going to add some flexibility by using an input variable, so that we can easily change the greeting.
+
+This requires us to make a series of inter-related changes:
+
+1. Tell the process about expected variable inputs using the `input:` block
+2. Edit the process to use the input
+3. Create a **channel** to pass input to the process (more on that in a minute)
+4. Add the channel as input to the process call
+
+### 5.1. Add an input definition to the process block
+
+First we need to adapt the process definition to accept an input.
+
+*before*
+```nextflow
+process sayHello {
+
+    output:
+        stdout
+```
+*after*
+```nextflow
+process sayHello {
+
+    publishDir 'results', mode: 'copy'
+
+    input:
+        val greeting
+
+    output:
+        stdout
+```
+
+### 5.2. Edit the process command to use the input variable
+
+Now we swap the original hardcoded value for the input variable.
+
+*before*
+```nextflow
+    """
+    echo 'Hello World!' > output.txt
+    """
+```
+*after*
+```nextflow
+    """
+    echo '$greeting' > output.txt
+    """
+```
+
+### 5.3. Create an input channel
+
+Now that our process expects an input, we need to set up that input in the workflow body. This is where channels come in: 
+Nextflow uses channels to feed inputs to processes and ferry data between processes that are connected together.
+
+There are multiple ways to do this, but for now, we're just going to use the simplest possible channel, containing a single value.
+
+We're going to create the channel using the `Channel.of()` factory, which sets up a simple value channel, 
+and give it a hardcoded string to use as greeting by declaring `greeting_ch = Channel.of('Hello world!')`.
+
+*before*
+```nextflow
+workflow {
+
+    // emit a greeting
+    sayHello()
+
+}
+```
+*after*
+```nextflow
+workflow {
+
+    // create a channel for inputs
+    greeting_ch = Channel.of('Hello world!')
+
+    // emit a greeting
+    sayHello()
+
+}
+```
+
+### 5.4. Add the channel as input to the process call
+
+Now we need to actually plug our newly created channel into the `sayHello()` process call.
+
+*before*
+```nextflow
+
+// emit a greeting
+sayHello()
+
+```
+*after*
+```nextflow
+
+// emit a greeting
+sayHello(greeting_ch)
+
+}
+```
+
+Run the updated file in your terminal.
+
+```bash
+nextflow run hello-world.nf
+```
+
+Feel free to check the results directory to satisfy yourself that the outcome is still the same as previously; 
+so far we're just progressively tweaking the internal plumbing to increase the flexibility of our workflow while achieving the same end result.
+You know how to use a simple channel to provide an input to a process.
+
+## 6. Use CLI parameters for inputs
 
 ## 7. Add a second step to the workflow
 
