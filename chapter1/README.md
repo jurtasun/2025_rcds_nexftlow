@@ -1,4 +1,4 @@
-# LMS 2024 - Introduction to Nextflow & nf-core
+## LMS 2024 - Introduction to Nextflow & nf-core
 
 ### Jesús Urtasun Elizari, LMS Bioinformatics
 
@@ -8,7 +8,7 @@ ICL email address `jurtasun@ic.ac.uk`
 
 <img src="/readme_figures/nextflow-logo.png">
 
-## Chapter 1 - Hello world with nextflow
+### Chapter 1. Hello world with nextflow
 
 A "Hello, World!" is a minimalist example that is meant to demonstrate the basic syntax and structure of a programming language or software framework.
 The example typically consists of printing the phrase "Hello, World!" to the output device, such as the console or terminal, or writing it to a file.
@@ -16,7 +16,7 @@ The example typically consists of printing the phrase "Hello, World!" to the out
 In this first part of the Hello Nextflow training course, we ease into the topic with a very simple domain-agnostic Hello World example, 
 which we'll progressively build up to demonstrate the usage of foundational Nextflow logic and components.
 
-## 0. Warmup: run Hello world on terminal
+### 0. Warmup: run Hello world on terminal
 
 Let's demonstrate this with a simple command that we run directly in the terminal, to show what it does before we wrap it in Nextflow.
 ```bash
@@ -38,9 +38,9 @@ less output.txt
 You now know how to run a simple command in the terminal that outputs some text, and optionally, how to make it write the output to a file. 
 Next, we will discover what that would look like written as a Nextflow workflow.
 
-## 1. Run Hello world with nextflow script
+### 1. Run Hello world with nextflow script
 
-### 1.1 The code structure
+#### 1.1. The code structure
 
 As mentioned in the orientation, we provide you with a fully functional if minimalist workflow script named `hello-world.nf` 
 that does the same thing as before (write out 'Hello World!') but with Nextflow.
@@ -81,7 +81,7 @@ The second block of code describes the workflow itself. The workflow definition 
 followed by an optional name, then the workflow body delimited by curly braces. 
 Here we have a workflow that consists of one call to the `sayHello` process.
 
-### 1.2. Run the workflow
+#### 1.2. Run the workflow
 
 Run the following command in your terminal.
 
@@ -93,7 +93,7 @@ The most important output here is the last line (line 6), which reports that the
 Okay, that's great, but where do we find the output? The `sayHello` process definition said that the output would be sent to standard out, 
 but nothing got printed in the console, did it?
 
-## 2. Send the output to a file
+### 2. Send the output to a file
 
 Instead of printing "Hello World!" to standard output, we'd prefer to save that output to a specific file, 
 just like we did when running in the terminal earlier.
@@ -101,7 +101,7 @@ This is how most tools that you'll run as part of real-world pipelines typically
 
 To achieve this result, both the script and the output definition blocks need to be updated.
 
-### 2.1. Update the process command to output a named file
+#### 2.1. Update the process command to output a named file
 
 This is the same change we made when we ran the command directly in the terminal earlier.
 
@@ -118,7 +118,7 @@ This is the same change we made when we ran the command directly in the terminal
     """
 ```
 
-### 2.2. Update the output declaration in the `sayHello` process
+#### 2.2. Update the output declaration in the `sayHello` process
 
 We need to tell Nextflow that it should now look for a specific file to be produced by the process execution.
 
@@ -142,7 +142,7 @@ nextflow run hello-world.nf
 Like you did before, find the `work` directory in the file explorer. 
 There, find the `output.txt` output file and verify that it contains the greeting as expected.
 
-### 2.3. Add a `publishDir` directive to the process
+#### 2.3. Add a `publishDir` directive to the process
 
 You'll have noticed that the output is buried in a working directory several layers deep. 
 Nextflow is in control of this directory and we are not supposed to interact with it. 
@@ -177,7 +177,7 @@ This time, Nextflow will have created a new directory called `results/`. In this
 If you check the contents it should match the output in our work/task directory. This is how we move results files outside of the working directories.
 This way, you can send outputs to a specific named file and use the `publishDir` directive to move files outside of the Nextflow working directory.
 
-## 3. Use the Nextflow resume feature
+### 3. Use the Nextflow resume feature
 
 Nextflow has an option called -resume that allows you to re-run a pipeline you've already launched previously. 
 When launched with -resume any processes that have already been run with the exact same code, settings and inputs will be skipped. 
@@ -189,7 +189,7 @@ There are two key advantages to doing this:
 - If you're running a pipeline in production and something goes wrong, in many cases you can fix the issue and relaunch the pipeline, 
 and it will resume running from the point of failure, which can save you a lot of time and compute.
 
-## 4. Add in variable inputs using a channel
+### 4. Add in variable inputs using a channel
 
 Run the updated file in your terminal.
 
@@ -199,7 +199,7 @@ nextflow run hello-world.nf
 
 Notice the additional `cached:` bit in the process status line, which means that Nextflow has recognized that it has already done this work and simply re-used the result from the last run.
 
-## 5. Add in variable inputs using a channel
+### 5. Add in variable inputs using a channel
 
 So far, we've been emitting a greeting hardcoded into the process command. 
 Now we're going to add some flexibility by using an input variable, so that we can easily change the greeting.
@@ -211,7 +211,7 @@ This requires us to make a series of inter-related changes:
 3. Create a **channel** to pass input to the process (more on that in a minute)
 4. Add the channel as input to the process call
 
-### 5.1. Add an input definition to the process block
+#### 5.1. Add an input definition to the process block
 
 First we need to adapt the process definition to accept an input.
 
@@ -235,7 +235,7 @@ process sayHello {
         stdout
 ```
 
-### 5.2. Edit the process command to use the input variable
+#### 5.2. Edit the process command to use the input variable
 
 Now we swap the original hardcoded value for the input variable.
 
@@ -252,7 +252,7 @@ Now we swap the original hardcoded value for the input variable.
     """
 ```
 
-### 5.3. Create an input channel
+#### 5.3. Create an input channel
 
 Now that our process expects an input, we need to set up that input in the workflow body. This is where channels come in: 
 Nextflow uses channels to feed inputs to processes and ferry data between processes that are connected together.
@@ -284,7 +284,7 @@ workflow {
 }
 ```
 
-### 5.4. Add the channel as input to the process call
+#### 5.4. Add the channel as input to the process call
 
 Now we need to actually plug our newly created channel into the `sayHello()` process call.
 
@@ -313,11 +313,11 @@ Feel free to check the results directory to satisfy yourself that the outcome is
 so far we're just progressively tweaking the internal plumbing to increase the flexibility of our workflow while achieving the same end result.
 You know how to use a simple channel to provide an input to a process.
 
-## 6. Use CLI parameters for inputs
+### 6. Use CLI parameters for inputs
 
 We want to be able to specify the input from the command line, since that is the piece that will almost always be different in subsequent runs of the workflow. Good news: Nextflow has a built-in workflow parameter system called `params`, which makes it easy to declare and use CLI parameters.
 
-### 6.1. Edit the input channel declaration to use a parameter
+#### 6.1. Edit the input channel declaration to use a parameter
 
 Here we swap out the hardcoded string for `params.greeting` in the channel creation line.
 
@@ -338,7 +338,7 @@ greeting_ch = Channel.of(params.greeting)
 
 This automatically creates a parameter called `greeting` that you can use to provide a value in the command line.
 
-### 6.2. Run the workflow again with the `--greeting parameter`
+#### 6.2. Run the workflow again with the `--greeting parameter`
 
 To provide a value for this parameter, simply add `--greeting <value>` to your command line.
 
@@ -346,7 +346,7 @@ To provide a value for this parameter, simply add `--greeting <value>` to your c
 nextflow run hello-world.nf --greeting 'Bonjour le monde!'
 ```
 
-### 6.3. Set a default value for a command line paramete
+#### 6.3. Set a default value for a command line paramete
 
 In many cases, it makes sense to supply a default value for a given parameter so that you don't have to specify it for every run.
 
@@ -380,7 +380,7 @@ The value of the parameter we passed on the command line overrode the value we g
 Now you know how to set up an input variable for a process and supply a value in the command line.
 Learn how to add in a second process and chain them together.
 
-## 7. Add a second step to the workflow
+### 7. Add a second step to the workflow
 
 Most real-world workflows involve more than one step. Here we introduce a second process that converts the text to uppercase (all-caps), 
 using the classic UNIX one-liner:
@@ -392,7 +392,7 @@ tr '[a-z]' '[A-Z]'
 We're going to run the command by itself in the terminal first to verify that it works as expected, just like we did at the start with echo `'Hello World'`.
 Then we'll write a process that does the same thing, and finally we'll connect the two processes so the output of the first serves as input to the second.
 
-### 7.1 run the command in the terminal
+#### 7.1. run the command in the terminal
 
 Run the following command in the terminal.
 
@@ -408,7 +408,7 @@ cat output.txt | tr '[a-z]' '[A-Z]' > UPPER-output.txt
 
 Now the `HELLO WORLD` output is in the new output file, `UPPER-output.txt.`
 
-### 7.2 Wrap the command in a nextflow process definition
+#### 7.2. Wrap the command in a nextflow process definition
 
 Write the following nextlflow process.
 
@@ -480,13 +480,13 @@ If you look carefully, you'll notice one of them (the output of the first proces
 It points to the location where that file lives in the work directory of the first process. 
 By default, Nextflow uses symbolic links to stage input files whenever possible, to avoid making duplicate copies.
 
-## 8. Run workdlow with many input values
+### 8. Run workdlow with many input values
 
 Workflows typically run on batches of inputs that are meant to be processed in bulk, so we want to upgrade the workflow to accept multiple input values.
 Conveniently, the `Channel.of()` factory we've been using is quite happy to accept more than one value, so we don't need to modify that at all; 
 we just have to load more values into the channel.
 
-### 8.1. Load multiple greetings into the input channel
+#### 8.1. Load multiple greetings into the input channel
 
 To keep things simple, we go back to hardcoding the greetings in the channel factory instead of using a parameter for the input, but we'll improve on that shortly.
 
@@ -518,7 +518,7 @@ but this only give us one subdirectory path for each. What's going on?
 By default, the ANSI logging system writes the logging from multiple calls to the same process on the same line.
 Fortunately, we can disable that behavior.
 
-### 8.2. Run the command again with the `-ansi-log` false option
+#### 8.2. Run the command again with the `-ansi-log` false option
 
 To expand the logging to display one line per process call, just add `-ansi-log false` to the command.
 
@@ -536,7 +536,7 @@ You may recall that we hardcoded the output file name for the first process. Thi
 but when we start processing multiple input values and publishing the outputs into the same directory of results, it becomes a problem. 
 For a given process, every call produces an output with the same file name, so Nextflow just overwrites the previous output file every time a new one is produced.
 
-### 8.3. Ensure the output file names will be unique
+#### 8.3. Ensure the output file names will be unique
 
 Since we're going to be publishing all the outputs to the same results directory, we need to ensure they will have unique names. 
 Specifically, we need to modify the first process to generate a file name dynamically so that the final file names will be unique.
@@ -598,9 +598,9 @@ nextflow run hello-world.nf
 Now we have six new files in addition to the two we already had in the results directory.
 Success! Now we can add as many greetings as we like without worrying about output files being overwritten.
 
-## 9. Modify the workflow to take a file as its source of input values
+### 9. Modify the workflow to take a file as its source of input values
 
-### 9.1. Set up a CLI parameter with a default value pointing to an input file
+#### 9.1. Set up a CLI parameter with a default value pointing to an input file
 
 It's often the case that, when we want to run on a batch of multiple input elements, the input values are contained in a file.
 As an example, we have provided you with a CSV file called `greetings.csv` in the `data/` directory, containing several greetings separated by commas.
@@ -621,7 +621,7 @@ params.input_file = "data/greetings.csv"
 
 ```
 
-### 9.2. Update the channel declaration to handle the input file
+#### 9.2. Update the channel declaration to handle the input file
 
 At this point we introduce a new channel factory, `Channel.fromPath()`, which has some built-in functionality for handling file paths.
 We're going to use that instead of the `Channel.of()` factory we used previously; the base syntax looks like this:
