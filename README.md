@@ -1,4 +1,4 @@
-# LMS 2024 - Introduction to Nextflow & nf-core
+## LMS 2024 - Introduction to Nextflow & nf-core
 
 ### Jesús Urtasun Elizari, LMS Bioinformatics
 
@@ -16,40 +16,68 @@ This course provides an introduction to nextflow and nf-core. The topics covered
 
 The course is organized in six chapters, covering topics listed below. All will be followed by a practical session and hands-on coding, both in Python and R. No prior experience on statistics or programming is required for the attendance of this course.
 
-# Roadmap of the course
+## Roadmap of the course
 
-## Chapter 1. Hello world with nextflow.
+### Chapter 1. Hello world with nextflow.
 
 - Hello world with nexftlow.
+- Process, channels, operators.
+- General structure of nextflow pipeline.
 
-## Chapter 2. Containers: docker & singularity.
+### Chapter 2. Containers: docker & singularity.
 
 - Containers: docker and singularity.
+- Mounting data into containers.
+- Containers within nextflow.
 
-## Chapter 3. Genomics with nexftlow.
+### Chapter 3. Genomics with nexftlow.
 
 - Genomics with nexftlow.
+- Example of variant calling.
+- Samtools and GATK analysis.
 
-## Chapter 4. Processes, channels, operators.
+### Chapter 4. Operators in nextflow.
 
-- Processes, channels, operators.
+- Operators in nextflow.
+- The Samtools software.
+- The GATK variant calling method.
 
-## Chapter 5. Nextflow config, environments, resource usage.
+### Chapter 5. Config nextflow.
 
-- Modules in nextflow: modular workflow, efficiency and optimization.
+- Config nextflow.
+- The `hello-config` directory.
+- Symbolic links, containers, submission script.
 
-## Chapter 6. Test & debug, nf-core and sequera.
+### Chapter 6. Modules in nextflow.
 
-- Test and debug a nextflow workflow.
-- nf-core: Standardized and reproducible pipelines.
-- Sequera platform: cloud running nextflow.
+- Modules in nextflow.
+- Effective and sustainable code.
+- Single process definition and encapsulation.
 
-## Setup
+### Chapter 7. Hellow nf-test.
+
+- Hellow nf-test.
+- The `hello-nf-test` directory.
+- Test a process for success and matching patterns.
+
+### Chapter 8. Hellow nf-core.
+
+- Hellow nf-core.
+- Standardized pipelines.
+- Components of a nf-core pipeline.
+
+### Chapter 9. Hello Seqera.
+
+- Chapter 9. Hello Seqera.
+- The sequera platform.
+- Running and monitoring nextflow workflows.
+
+### Setup
 
 We will be working with Visual Studio Code / Gitpod / RStudio as main editors. Although recommended, they do not need to be installed in your local computers, since we will use Codespaces provided by Github, which already implement an interface ready to program an execute the code.
 Notebook versions are also useful, such as Jupyter notebooks (for the Python version), or Rmd files (for the R version). 
 
-## Getting Started
+### Getting Started
 
 1. Download this repository to your computer as a ZIP file and unpack it.
 
@@ -57,7 +85,7 @@ Notebook versions are also useful, such as Jupyter notebooks (for the Python ver
 
 3. Open a Codespace where we will be using either Visual Studio Code / RStudio fro the practical sessions.
 
-## Install and run nextflow locally in your machine
+### Install and run nextflow locally in your machine
 
 1. Install homebrew
 Go to the homebrew site [https://brew.sh](https://brew.sh) and run the following command.
@@ -114,10 +142,9 @@ Check successfull installation of singulariy.
 nextflow run hello -with-docker
 ```
 
-## Evaluation
+### Evaluation
 
 Your feedback is very important to the Graduate School as we are continually trying to improve the training we offer.
-
 At the end of the course, please help us by completing the evaluation form at [...]
 
 <hr>
