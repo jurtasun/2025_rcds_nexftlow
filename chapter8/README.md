@@ -19,13 +19,17 @@ nf-core provides a standardized set of best practices, guidelines, and templates
 One of the key benefits of nf-core is that it promotes open development, testing, and peer review, ensuring that the pipelines are robust, well-documented, and validated against real-world datasets. This helps to increase the reliability and reproducibility of scientific analyses and ultimately enables researchers to accelerate their scientific discoveries.
 
 nf-core is published in Nature Biotechnology: 
-[https://www.nature.com/articles/s41587-020-0439-x](Nat Biotechnol 38, 276–278 (2020). Nature Biotechnology). 
-An updated preprint is available at [https://www.biorxiv.org/content/10.1101/2024.05.10.592912v1](bioRxiv).
+[https://www.nature.com/articles/s41587-020-0439-x](https://www.nature.com/articles/s41587-020-0439-x). 
+An updated preprint is available at 
+[https://www.biorxiv.org/content/10.1101/2024.05.10.592912v1](bhttps://www.biorxiv.org/content/10.1101/2024.05.10.592912v1).
 
 ### nf-core pipelines and other components
 
-The nf-core collection currently offers [https://nf-co.re/pipelines/](over 100 pipelines) in various stages of development, 
-[https://nf-co.re/subworkflows/](72 subworkflow) and [https://nf-co.re/modules/](over 1300 modules) that you can use to build your own pipelines.
+The nf-core collection currently offers over 100 pipelines
+[https://nf-co.re/pipelines](https://nf-co.re/pipelines) in various stages of development, 
+72 subworkflow [https://nf-co.re/subworkflows](https://nf-co.re/subworkflows) and 
+over 1300 module [https://nf-co.re/modules](https://nf-co.re/modules) that you can use to build your own pipelines.
+
 
 Each released pipeline has a dedicated page that includes 6 documentation sections:
 

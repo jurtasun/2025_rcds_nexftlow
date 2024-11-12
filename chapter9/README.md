@@ -17,4 +17,7 @@ You can use Seqera Platform via either the **CLI**, through the **online GUI** o
 
 ### 1. Use Seqera Platform to capture and monitor Nextflow jobs launched from the CLI
 
+We'll start by using the Nextflow CLI to launch a pipeline and monitor it in Seqera Platform. Start by logging into the
+[https://seqera.io](https://seqera.io)
+
 ### 2 Using Seqera Platform Launchpad to run Nextflow workflows
