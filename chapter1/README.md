@@ -51,9 +51,7 @@ then we'll run it (before trying to make any modifications) to verify that it do
 ```nextflow
 #!/usr/bin/env nextflow
 
-/*
- * Use echo to print 'Hello World!' to standard out
- */
+// Use echo to print 'Hello World!' to standard out
 process sayHello {
 
     output:
@@ -384,6 +382,284 @@ Learn how to add in a second process and chain them together.
 
 ## 7. Add a second step to the workflow
 
+Most real-world workflows involve more than one step. Here we introduce a second process that converts the text to uppercase (all-caps), 
+using the classic UNIX one-liner:
+
+```bash
+tr '[a-z]' '[A-Z]'
+```
+
+We're going to run the command by itself in the terminal first to verify that it works as expected, just like we did at the start with echo `'Hello World'`.
+Then we'll write a process that does the same thing, and finally we'll connect the two processes so the output of the first serves as input to the second.
+
+### 7.1 run the command in the terminal
+
+Run the following command in the terminal.
+
+```bash
+echo 'Hello World' | tr '[a-z]' '[A-Z]'
+```
+
+Modify it to take a file as input and write the output in another one.
+
+```bash
+cat output.txt | tr '[a-z]' '[A-Z]' > UPPER-output.txt
+```
+
+Now the `HELLO WORLD` output is in the new output file, `UPPER-output.txt.`
+
+### 7.2 Wrap the command in a nextflow process definition
+
+Write the following nextlflow process.
+
+```nextflow
+
+// Use a text replace utility to convert the greeting to uppercase
+process convertToUpper {
+
+    publishDir 'results', mode: 'copy'
+
+    input:
+        path input_file
+
+    output:
+        path "UPPER-${input_file}"
+
+    script:
+    """
+    cat '$input_file' | tr '[a-z]' '[A-Z]' > UPPER-${input_file}
+    """
+
+}
+
+```
+
+You will notice that here we composed the second output filename based on the first one.
+Now modify the workflow accordingly, adding a call to the new process.
+
+```nextflow
+
+workflow {
+
+    // create a channel for inputs
+    greeting_ch = Channel.of(params.greeting)
+
+    // emit a greeting
+    sayHello(greeting_ch)
+
+    // convert the greeting to uppercase
+    convertToUpper()
+
+}
+
+```
+
+Looking good! But we still need to wire up the `convertToUpper` process call to run on the output of `sayHello`.
+The output of the `sayHello` process is automatically packaged as a channel called `sayHello.out`, 
+so all we need to do is pass that as the input to the `convertToUpper process`.
+
+```nextflow
+
+// convert the greeting to uppercase
+convertToUpper(sayHello.out)
+
+}
+
+```
+
+Let's make sure this works. Run the following command in the terminal.
+
+```bash
+nextflow run hello-world.nf --greeting 'Hello World!'
+```
+
+Oh, how exciting! There is now an extra line in the log output, which corresponds to the new process we just added.
+You'll notice that this time the workflow produced two new work subdirectories; one per process call. 
+Check out the work directory of the call to the second process, where you should find two different output files listed. 
+If you look carefully, you'll notice one of them (the output of the first process) has a little arrow icon on the right; that signifies it's a symbolic link. 
+It points to the location where that file lives in the work directory of the first process. 
+By default, Nextflow uses symbolic links to stage input files whenever possible, to avoid making duplicate copies.
+
 ## 8. Run workdlow with many input values
 
-## 9. Run workflow with an input runcard / sample sheet.
+Workflows typically run on batches of inputs that are meant to be processed in bulk, so we want to upgrade the workflow to accept multiple input values.
+Conveniently, the `Channel.of()` factory we've been using is quite happy to accept more than one value, so we don't need to modify that at all; 
+we just have to load more values into the channel.
+
+### 8.1. Load multiple greetings into the input channel
+
+To keep things simple, we go back to hardcoding the greetings in the channel factory instead of using a parameter for the input, but we'll improve on that shortly.
+
+*before*
+```nextflow
+
+// create a channel for inputs
+greeting_ch = Channel.of(params.greeting)
+
+```
+
+*after*
+```nextflow
+
+// create a channel for inputs
+greeting_ch = Channel.of('Hello','Bonjour','Holà')
+
+```
+
+Again, run the following code
+
+```bash
+nextflow run hello-world.nf
+```
+
+However... This seems to indicate that '3 of 3' calls were made for each process, which is encouraging, 
+but this only give us one subdirectory path for each. What's going on?
+
+By default, the ANSI logging system writes the logging from multiple calls to the same process on the same line.
+Fortunately, we can disable that behavior.
+
+### 8.2. Run the command again with the `-ansi-log` false option
+
+To expand the logging to display one line per process call, just add `-ansi-log false` to the command.
+
+```bash
+nextflow run hello-world.nf -ansi-log false
+```
+
+This time we see all six work subdirectories listed in the output:
+That's much better; at least for this number of processes. For a complex workflow, or a large number of inputs, 
+having the full list output to the terminal might get a bit overwhelming.
+That being said, we have another problem. If you look in the `results` directory, there are only two files: `output.txt` and `UPPER-output.txt!`
+
+What's up with that? Shouldn't we be expecting two files per input greeting, so six files in all?
+You may recall that we hardcoded the output file name for the first process. This was fine as long as there was only a single call made per process, 
+but when we start processing multiple input values and publishing the outputs into the same directory of results, it becomes a problem. 
+For a given process, every call produces an output with the same file name, so Nextflow just overwrites the previous output file every time a new one is produced.
+
+### 8.3. Ensure the output file names will be unique
+
+Since we're going to be publishing all the outputs to the same results directory, we need to ensure they will have unique names. 
+Specifically, we need to modify the first process to generate a file name dynamically so that the final file names will be unique.
+
+So how do we make the file names unique? A common way to do that is to use some unique piece of metadata as part of the file name. 
+Here, for convenience, we'll just use the greeting itself.
+
+*before*
+```nextflow
+
+process sayHello {
+
+    publishDir 'results', mode: 'copy'
+
+    input:
+        val greeting
+
+    output:
+        path "output.txt"
+
+    script:
+    """
+    echo '$greeting' > "output.txt"
+    """
+
+}
+
+```
+
+*after*
+```nextflow
+
+process sayHello {
+
+    publishDir 'results', mode: 'copy'
+
+    input:
+        val greeting
+
+    output:
+        path "${greeting}-output.txt"
+
+    script:
+    """
+    echo '$greeting' > '$greeting-output.txt'
+    """
+
+}
+
+```
+
+This should produce a unique output file name for every call of each process.
+Run the workflow and check the result.
+
+```bash
+nextflow run hello-world.nf
+```
+
+Now we have six new files in addition to the two we already had in the results directory.
+Success! Now we can add as many greetings as we like without worrying about output files being overwritten.
+
+## 9. Modify the workflow to take a file as its source of input values
+
+### 9.1. Set up a CLI parameter with a default value pointing to an input file
+
+It's often the case that, when we want to run on a batch of multiple input elements, the input values are contained in a file.
+As an example, we have provided you with a CSV file called `greetings.csv` in the `data/` directory, containing several greetings separated by commas.
+
+*before*
+```nextflow
+
+// Pipeline parameters
+params.greeting = "Bonjour le monde!"
+
+```
+
+*after*
+```nextflow
+
+// Pipeline parameters
+params.input_file = "data/greetings.csv"
+
+```
+
+### 9.2. Update the channel declaration to handle the input file
+
+At this point we introduce a new channel factory, `Channel.fromPath()`, which has some built-in functionality for handling file paths.
+We're going to use that instead of the `Channel.of()` factory we used previously; the base syntax looks like this:
+
+Now, we are going to deploy a new concept, an 'operator' to transform that CSV file into channel content. 
+You'll learn more about operators later, but for now just understand them as ways of transforming channels in a variety of ways.
+
+Since our goal is to read in the contents of a `.csv` file, we're going to add the `.splitCsv()` operator to make Nextflow parse the file contents accordingly, 
+as well as the `.flatten()` operator to turn the array element produced by `.splitCsv()` into a channel of individual elements.
+
+So the channel construction instruction becomes:
+
+*before*
+```nextflow
+
+// create a channel for inputs
+greeting_ch = Channel.of('Hello','Bonjour','Holà')
+
+```
+
+*after*
+```nextflow
+
+// create a channel for inputs from a CSV file
+greeting_ch = Channel.fromPath(params.input_file)
+                     .splitCsv()
+                     .flatten()
+
+```
+
+Run the workflow and check the result.
+
+```bash
+nextflow run hello-world.nf
+```
+
+Looking at the outputs, we see each greeting was correctly extracted and processed through the workflow. 
+We've achieved the same result as the previous step, but now we have a lot more flexibility to add more elements to the channel of greetings we want to process.
+
+You know how to provide the input values to the workflow via a file. More generally, you've learned how to use the essential components of Nextflow 
+and you have a basic grasp of the logic of how to build a workflow and manage inputs and outputs.
