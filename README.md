@@ -1,20 +1,23 @@
-## LMS 2024 - Introduction to Nextflow & nf-core
+## RCDS 2025 - Introduction to Nextflow & nf-core
 
-### Jesús Urtasun Elizari, LMS Bioinformatics
-
-LMS email address `Jesus.Urtasun@lms.mrc.ac.uk`
+### Dr. Jesús Urtasun Elizari, ICL Research Computing & Data Science
 
 ICL email address `jurtasun@ic.ac.uk`
+
+LMS email address `Jesus.Urtasun@lms.mrc.ac.uk`
 
 <img src="/readme_figures/nextflow-logo.png">
 <img src="/readme_figures/seqera-logo.png">
 
 ### Find the content of the course in GitHub:
-[https://github.com/jurtasun/2024_nexftlow](https://github.com/jurtasun/2024_nexftlow)
+[https://github.com/jurtasun/2025_rcds_nexftlow](https://github.com/jurtasun/2025_rcds_nexftlow)
 
-This course provides an introduction to nextflow and nf-core. The topics covered will include basic concepts on bash scripting and linux OS, containers and environments. Then we will show how nextflow can be used to build automatized and reproducible workflows for biological and genomics data analysis.
+This course provides an introduction to nextflow and nf-core automated pipelines.
+The topics covered will include basic concepts on bash scripting and linux OS, containers and environments;
+Then we will show how nextflow can be used to build automatized and reproducible workflows for biological and genomics data analysis.
 
-The course is organized in six chapters, covering topics listed below. All will be followed by a practical session and hands-on coding, both in Python and R. No prior experience on statistics or programming is required for the attendance of this course.
+The course is organized in six chapters, covering topics listed below. All will be followed by a practical session and hands-on coding.
+No prior experience on programming or statistics is required for the attendance of this course, as all topics will be properly introduce as the course progresses.
 
 ## Roadmap of the course
 
@@ -74,16 +77,17 @@ The course is organized in six chapters, covering topics listed below. All will 
 
 ### Setup
 
-We will be working with Visual Studio Code / Gitpod / RStudio as main editors. Although recommended, they do not need to be installed in your local computers, since we will use Codespaces provided by Github, which already implement an interface ready to program an execute the code.
-Notebook versions are also useful, such as Jupyter notebooks (for the Python version), or Rmd files (for the R version). 
+We will be working with Visual Studio Code / Gitpod as main editors.
+Although recommended, they do not need to be installed in your local computers, since we will use Codespaces provided by Github, 
+which already implement an interface ready to program an execute the code.
 
 ### Getting Started
 
 1. Download this repository to your computer as a ZIP file and unpack it.
 
-2. Open the terminal and navigate to the unpacked directory to work with the .py / .R examples.
+2. Open the terminal and navigate to the unpacked directory to work with the .nf examples.
 
-3. Open a Codespace where we will be using either Visual Studio Code / RStudio fro the practical sessions.
+3. Open a Codespace where we will be using either Visual Studio Code fro the practical sessions.
 
 ### Install and run nextflow locally in your machine
 

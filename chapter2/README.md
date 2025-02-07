@@ -1,10 +1,10 @@
-## LMS 2024 - Introduction to Nextflow & nf-core
+## RCDS 2025 - Introduction to Nextflow & nf-core
 
-### Jesús Urtasun Elizari, LMS Bioinformatics
-
-LMS email address `Jesus.Urtasun@lms.mrc.ac.uk`
+### Dr. Jesús Urtasun Elizari, ICL Research Computing & Data Science
 
 ICL email address `jurtasun@ic.ac.uk`
+
+LMS email address `Jesus.Urtasun@lms.mrc.ac.uk`
 
 <img src="/readme_figures/nextflow-logo.png">
 

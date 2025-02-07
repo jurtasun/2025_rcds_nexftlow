@@ -1,14 +1,12 @@
-## LMS 2024 - Introduction to Nextflow & nf-core
+## RCDS 2025 - Introduction to Nextflow & nf-core
 
-### Jesús Urtasun Elizari, LMS Bioinformatics
-
-LMS email address `Jesus.Urtasun@lms.mrc.ac.uk`
+### Dr. Jesús Urtasun Elizari, ICL Research Computing & Data Science
 
 ICL email address `jurtasun@ic.ac.uk`
 
-<img src="/readme_figures/nextflow-logo.png">
+LMS email address `Jesus.Urtasun@lms.mrc.ac.uk`
 
-### Chapter 3. Genomics with nexftlow.
+<img src="/readme_figures/nextflow-logo.png">
 
 In Part 1, you learned how to use the basic building blocks of Nextflow to assemble a simple pipeline capable of processing some text and parallelizing execution if there were multiple inputs. Then in Part 2, you learned how to use containers to pull in command line tools to test them and integrate them into your pipelines without having to deal with software dependency issues.
 
@@ -39,9 +37,123 @@ So to recap, we're going to develop a workflow that does the following:
 
 ### 0. Warmup: Test the Samtools and GATK commands interactively.
 
+Just like in the Hello World example, we want to try out the commands manually before we attempt to wrap them in a workflow. The tools we need (Samtools and GATK) are not installed in the Gitpod environment, but that's not a problem since you learned how to work with containers in Part 2 of this training series (Hello Containers).
+
+#### 0.1. Index a BAM input file with Samtools
+
+We're going to pull down a Samtools container, spin it up interactively and run the `samtools index` command on one of the BAM files.
+
+Pull the Samtools container
+```bash
+docker pull community.wave.seqera.io/library/samtools:1.20--b5dfbd93de237464
+```
+
+Spin up the Samtools container interactively
+```bash
+docker run -it -v ./data:/data community.wave.seqera.io/library/samtools:1.20--b5dfbd93de237464
+```
+
+The Samtools documentation [...] gives us the command line to run to index a BAM file.
+We only need to provide the input file; the tool will automatically generate a name for the output by appending .bai to the input filename.
+
+```bash
+samtools index /data/bam/reads_mother.bam
+```
+
+This should complete immediately, and you should now see a file called `reads_mother.bam.bai` in the same directory as the original BAM input file.
+
+Exit the samtools container
+```bash
+exit
+```
+
+#### 0.2 Call variants with GATK HaplotypeCaller
+
+Pull the GATK container
+```bash
+docker pull community.wave.seqera.io/library/gatk4:4.5.0.0--730ee8817e436867
+```
+
+Spin up the GATK container interactively
+```bash
+docker run -it -v ./data:/data community.wave.seqera.io/library/gatk4:4.5.0.0--730ee8817e436867
+```
+
+The GATK documentation [...] gives us the command line to run to perform variant calling on a BAM file.
+
+We need to provide the BAM input file (-I) as well as the reference genome (-R), a name for the output file (-O) and a list of genomic intervals to analyze (-L).
+
+However, we don't need to specify the path to the index file; the tool will automatically look for it in the same directory, based on the established naming and co-location convention. The same applies to the reference genome's accessory files (index and sequence dictionary files, *.fai and *.dict).
+```bash
+gatk HaplotypeCaller \
+        -R /data/ref/ref.fasta \
+        -I /data/bam/reads_mother.bam \
+        -O reads_mother.vcf \
+        -L /data/ref/intervals.bed
+```
+
+The output file `reads_mother.vcf` is created inside your working directory in the container, so you won't see it in the Gitpod file explorer unless you change the output file path. However, it's a small test file, so you can cat it to open it and view the contents. If you scroll all the way up to the start of the file, you'll find a header composed of many lines of metadata, followed by a list of variant calls, one per line.
+
+Each line describes a possible variant identified in the sample's sequencing data. For guidance on interpreting VCF format, see this helpful article [...].
+
+The output VCF file is accompanied by an index file called `reads_mother.vcf.idx` that was automatically created by GATK. It has the same function as the BAM index file, to allow tools to seek and retrieve subsets of data without loading in the entire file.
+
+You know how to test the Samtools indexing and GATK variant calling commands in their respective containers.
+
+We will now learn how to wrap those same commands into a two-step workflow that uses containers to execute the work.
+
+
 ### 1. Write a single-stage workflow that runs Samtools index on a BAM file.
 
+We provide you with a workflow file, `hello-genomics.nf`, that outlines the main parts of the workflow. It's not functional; its purpose is just to serve as a skeleton that you'll use to write the actual workflow.
+
+#### 1.1 Define the indexing process
+
+Let's start by writing a process, which we'll call `SAMTOOLS_INDEX`, describing the indexing operation.
+
+```nextflow
+/*
+ * Generate BAM index file
+ */
+process SAMTOOLS_INDEX {
+
+    container 'community.wave.seqera.io/library/samtools:1.20--b5dfbd93de237464'
+
+    publishDir params.outdir, mode: 'symlink'
+
+    input:
+        path input_bam
+
+    output:
+        path "${input_bam}.bai"
+
+    script:
+    """
+    samtools index '$input_bam'
+    """
+}
+```
+
+You should recognize all the pieces from what you learned in Part 1 & Part 2 of this training series; the only notable change is that this time we're using `mode: symlink` for the `publishDir` directive, and we're using a parameter to define the `publishDir`.
+
+Note that even though the data files we're using here are very small, in genomics they can get very large. For the purposes of demonstration in the teaching environment, we're using the 'symlink' publishing mode to avoid unnecessary file copies. You shouldn't do this in your final workflows, since you'll lose results when you clean up your work directory.
+
+This process is going to require us to pass in a file path via the `input_bam` input, so let's set that up next.
+
+
 ### 2. Add a second process to run GATK HaplotypeCaller on the indexed BAM file.
+
+At the top of the file, under the `Pipeline parameters` section, we declare a CLI parameter called `reads_bam` and give it a default value. That way, we can be lazy and not specify the input when we type the command to launch the pipeline (for development purposes). We're also going to set `params.outdir` with a default value for the output directory.
+
+```nextflow
+/*
+ * Pipeline parameters
+ */
+
+// Primary input
+params.reads_bam = "${projectDir}/data/bam/reads_mother.bam"
+params.outdir    = "results_genomics"
+```
 
 ### 3. Adapt the workflow to run on a batch of samples
 
