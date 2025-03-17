@@ -69,12 +69,6 @@ No prior experience on programming or statistics is required for the attendance 
 - Standardized pipelines.
 - Components of a nf-core pipeline.
 
-### Chapter 9. Hello Seqera.
-
-- Chapter 9. Hello Seqera.
-- The sequera platform.
-- Running and monitoring nextflow workflows.
-
 ### Setup
 
 We will be working with Visual Studio Code / Gitpod as main editors.
